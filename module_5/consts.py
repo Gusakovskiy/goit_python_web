@@ -1,0 +1,1 @@
+FIBONACCI_TASKS = (30, 42)
