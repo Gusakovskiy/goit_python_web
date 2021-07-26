@@ -10,6 +10,7 @@ __pycache__/
 # data
 *.xlsx
 *.csv
+tmp.txt
 
 # C extensions
 *.so
@@ -136,11 +137,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 # compiel
-__pycache__/
 pycache
 *.pyc
-
-# data
-*.xlsx
-*.csv
-venv/
