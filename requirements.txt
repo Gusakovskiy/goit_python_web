@@ -1,4 +1,9 @@
 pytest==6.2.4
 pep8==1.7.1
+
+# async stuff
 aiomisc==14.3.2
 aiohttp==3.7.4
+aiopath==0.5.11
+aiofile==3.6.0
+aioshutil==1.1
