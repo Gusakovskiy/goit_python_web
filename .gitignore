@@ -15,6 +15,7 @@ tmp.txt
 **/**/sorted_trash/
 # C extensions
 *.so
+curl-format.txt
 
 # Distribution / packaging
 .Python
