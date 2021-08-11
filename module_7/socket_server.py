@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import socket
-from time import sleep
 
 from module_7.settings import CHUNK_BYTES
 
@@ -18,26 +17,17 @@ def main():
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind((HOST, PORT))
         print(f'Listen {HOST} {PORT}')
-        s.listen(_MAX_NUMBER_OF_CONNECTIONS)  # number of unaccepted connection  before refusing new connections
+        s.listen(_MAX_NUMBER_OF_CONNECTIONS)  # number of unaccepted connection before refusing new connections
         print('Accept ')
         conn, addr = s.accept()  # blocking syscall
-        counter = 0
         with conn:
             print('Connected by', addr)
-            while True:
-                data = conn.recv(CHUNK_BYTES)  # blocking syscall
-                # sleep(10)
-                print(f'Data received {data}')
-                print(f'Counter {counter}')
-                if not data:  # if empty bytes then EOF
-                    break
-                else:
-                    counter += 1
-                # do echo server
+            data = conn.recv(CHUNK_BYTES)  # blocking syscall
+            # sleep(10)
+            print(f'Data received {data}')
             if b'server' in data:
                 data = data.replace(b'server', b'client')
             conn.sendall(data.title())
-        print(f'Number of calls {counter}')
 
 
 if __name__ == '__main__':

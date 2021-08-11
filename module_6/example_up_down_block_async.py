@@ -1,7 +1,6 @@
 import asyncio
 import time
 
-
 async def count_up(count):
     counter = 0
     while counter < count:
