@@ -6,7 +6,7 @@ from time import sleep
 def client(host, port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        # s.bind((host, host + 1))
+        # s.bind((host, port + 1))
         message = b'hello server'
         try:
             print('Connecting')

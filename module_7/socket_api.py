@@ -19,7 +19,7 @@ import socket
 # https://docs.python.org/3/library/socket.html
 # https://docs.python.org/3/howto/sockets.html#socket-howto
 s = socket.socket()  # Transport layer
-s.bind()
+s.bind(('0.0.0.0', 5000))
 s.listen()
 s.accept()
 s.connect()
