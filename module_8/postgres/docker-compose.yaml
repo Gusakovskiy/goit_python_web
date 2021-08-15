@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  db:
+      container_name: module_8_pg
+      image: postgres:13.4
+      restart: always
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: qwe123
+        POSTGRES_DB: chinook
+      ports:
+        - "5432:5432"
+      volumes:
+        - ./create_chinook.sql:/docker-entrypoint-initdb.d/create_chinook.sql
+        - module_8_pg_data:/var/lib/postgresql/data/
+volumes:
+  module_8_pg_data:
