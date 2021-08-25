@@ -9,5 +9,6 @@ aiofile==3.6.0
 aioshutil==1.1
 
 # db
+Faker==8.12.0
 psycopg2==2.9.1
 SQLAlchemy==1.4.23

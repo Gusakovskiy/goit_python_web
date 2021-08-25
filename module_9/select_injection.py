@@ -13,8 +13,8 @@ ps_connection.set_session(autocommit=True)
 
 
 def worst():
-    # bad_query = "'; select true; --"
-    bad_query = "'; update actor set first_name = 'Penelope' where actor_id = 1 ; select true; --"
+    bad_query = "'; select true; --"
+    # bad_query = "'; update actor set first_name = 'Antilopa' where actor_id = 1 ; select true; --"
     # with engine_chinook.connect() as connection:
     # connection = engine_chinook.raw_connection()
     with ps_connection.cursor() as cursor:
@@ -52,5 +52,5 @@ if __name__ == '__main__':
     """
     Examples inspired by https://realpython.com/prevent-python-sql-injection/
     """
-    worst()
-    better()
+    best()
+    # better()
