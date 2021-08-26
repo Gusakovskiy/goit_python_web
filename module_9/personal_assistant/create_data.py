@@ -1,7 +1,7 @@
 import random
 
 from faker import Faker
-
+from sqlalchemy import exists, and_
 from module_9.personal_assistant.db import session, engine
 from sqlalchemy.sql.expression import func
 from module_9.personal_assistant.models import (
@@ -60,10 +60,51 @@ def create_relation_user_companies():
             _result = connection.execute(insert_relationship)  # user inserted
 
 
+def create_more_contacts():
+    users = session.query(User.user_id).order_by(func.random()).limit(300)
+    for user in users:
+        contact = Contact(
+            user_id=user.user_id,
+            address=fake.address(),
+            email=fake.ascii_free_email(),
+            cell_phone=fake.phone_number()
+        )
+        session.add(contact)
+    session.commit()
+
+
+def create_more_jobs():
+    # what wrong ?
+    user_ids = session.query(company_user_table.c.user_id).order_by(func.random()).limit(50)
+    companies = session.query(Company).all()
+    with engine.connect() as connection:
+        for user_row in session.execute(user_ids):
+            user_id = user_row[0]
+            company = random.choice(companies)
+            job_exists = session.query(
+                exists().where(
+                    and_(
+                        company_user_table.c.user_id == user_id,
+                        company_user_table.c.company_id == company.company_id,
+                    )
+                )
+            ).scalar()
+            if job_exists:
+                continue
+            insert_relationship = company_user_table.insert().values(
+                user_id=user_id,
+                company_id=company.company_id,
+                job_title=fake.job(),
+            )
+            _result = connection.execute(insert_relationship)
+
+
 def main():
     create_company()
     create_user_contacts()
     create_relation_user_companies()
+    create_more_contacts()
+    create_more_jobs()
 
 
 if __name__ == '__main__':

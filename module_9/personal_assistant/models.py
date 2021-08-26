@@ -37,6 +37,10 @@ class User(Base):
         back_populates="workers"
     )
 
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
 
 class Contact(Base):
     __tablename__ = 'contact'
