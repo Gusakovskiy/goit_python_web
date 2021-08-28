@@ -13,3 +13,7 @@ Faker==8.12.0
 psycopg2==2.9.1
 SQLAlchemy==1.4.23
 alembic==1.6.5
+
+# NOSQL
+pymongo==3.12.0
+redis3==3.5.2.2
