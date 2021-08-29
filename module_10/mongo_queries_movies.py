@@ -89,7 +89,7 @@ def find_with_js():
 
 
 if __name__ == '__main__':
-    # get_all()
+    get_all()
     # get_commedies()
-    get_drama_aggregation()
+    # get_drama_aggregation()
     # find_with_js()
