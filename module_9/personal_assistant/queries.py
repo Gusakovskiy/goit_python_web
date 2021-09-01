@@ -27,8 +27,8 @@ def user_with_contacts_proper_join():
     ).join(
         User.contacts
     ).options(
-        # joinedload(User.contacts).load_only(Contact.email, Contact.cell_phone),
-        selectinload(User.contacts).load_only(Contact.email, Contact.cell_phone),
+        joinedload(User.contacts).load_only(Contact.email, Contact.cell_phone),
+        # selectinload(User.contacts).load_only(Contact.email, Contact.cell_phone),
         load_only(User.user_id, User.first_name, User.last_name),
     )
     for user in users:
@@ -81,8 +81,8 @@ def most_working_person():
 
 
 if __name__ == '__main__':
-    user_with_contacts_join()
-    # user_with_contacts_proper_join()
+    # user_with_contacts_join()
+    user_with_contacts_proper_join()
     # contact_with_birthday()
     # most_working_person()
 
