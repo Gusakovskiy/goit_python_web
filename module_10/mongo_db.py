@@ -3,6 +3,7 @@ from pymongo.database import Database
 from pymongo.collection import Collection
 m_uri = "mongodb://mongo_admin:qwe123@localhost:27017/movies_db?retryWrites=true&w=majority"
 sw_uri = "mongodb://mongo_admin:qwe123@localhost:27017/sw_db?retryWrites=true&w=majority"
+
 # Write concern https://docs.mongodb.com/manual/reference/write-concern/
 movies_mongo_client = pymongo.MongoClient(m_uri)
 sw_mongo_client = pymongo.MongoClient(sw_uri)
@@ -14,6 +15,7 @@ movies_collection: Collection = movies_db.movies
 sw_films_collection: Collection = sw_db.films
 sw_people_collection: Collection = sw_db.people
 sw_starships_collection: Collection = sw_db.starships
+
 ### JS client
 ### mongo
 ### SWITCH TO DATABASE

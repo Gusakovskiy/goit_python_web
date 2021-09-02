@@ -16,6 +16,7 @@ tmp.txt
 # C extensions
 *.so
 curl-format.txt
+celerybeat-schedule.db
 
 # Distribution / packaging
 .Python
