@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from string import punctuation
-from typing import List
+from typing import List, Iterable
 
 from faker import Faker
 
@@ -133,7 +133,7 @@ def update_doc(doc):
     pipeline.execute(raise_on_error=True)
 
 
-def search_queries(queries):
+def search_queries(queries: Iterable[str]):
     print(' ')
     print('*' * 42)
 

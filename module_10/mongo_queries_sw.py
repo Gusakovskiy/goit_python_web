@@ -75,11 +75,10 @@ def films_info():
             print(film)
 
 
-
 if __name__ == '__main__':
     # all_people()
     # find_people(query="Luke")
-    # find_people(query="D2")
+    # find_people(query="R2 D2")
     # find_people(query="Darth")
     # find_people(query="Dar")
     # find_people(query="brown")

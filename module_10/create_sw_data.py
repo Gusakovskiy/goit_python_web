@@ -48,7 +48,7 @@ if __name__ == "__main__":
     # sw_db.create_collection("films")
     # sw_db.create_collection("people")
     # sw_db.create_collection("starships")
-    # main()
+    main()
     sw_people_collection.create_index(
         [
             ("name", "text"),
