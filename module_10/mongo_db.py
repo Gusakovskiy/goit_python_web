@@ -29,7 +29,16 @@ sw_starships_collection: Collection = sw_db.starships
 #     user: "mongo_admin",
 #     pwd: "qwe123",
 #     roles: [
-#       { role: "readWrite", db: "movies_db" }
+#       { role: "readWrite", db: "todo_db" }
+#     ]
+# })
+
+# db.updateUser(
+#     "mongo_admin",
+# {
+#     roles: [
+#       { role: "readWrite", db: "personal_db"},
+#         {role: "readWrite", db: "todo_db"}
 #     ]
 # })
 #
