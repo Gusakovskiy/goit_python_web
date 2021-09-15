@@ -6,8 +6,8 @@ from flask import (
 from pymongo.collection import Collection, ReturnDocument
 from werkzeug.exceptions import abort
 
-from module_11.personal_app.auth import login_required
-from module_11.personal_app.db import get_db
+from .auth import login_required
+from .db import get_db
 
 todo_bp = Blueprint('todo', __name__)
 
@@ -22,7 +22,7 @@ def _load_collection() -> Collection:
 def index():
     todo_collection = _load_collection()
     cursor = todo_collection.find(
-            dict()
+            dict(),
         ).sort(
             [
                 ("done", pymongo.ASCENDING),
@@ -38,7 +38,7 @@ def index():
                 'done': todo['done']
             }
         }
-        for index, todo in enumerate(cursor, 1 )
+        for index, todo in enumerate(cursor, 1)
     ]
     return render_template('todo/index.html', tasks=tasks)
 
@@ -80,17 +80,16 @@ def create():
                     title=title,
                     description=description,
                     done=False,
-                    order=list(latest_order)[0]['max_priority'] + 1
+                    priority=list(latest_order)[0]['max_priority'] + 1
                 )
             )
             return redirect(url_for('todo.index'))
-
-    return render_template('todo/create.html')
+    # return render_template('todo/create.html')
 
 
 @todo_bp.route('/<todo_id>/mark_done', methods=('POST',))
 @login_required
-def mark_done(todo_id):
+def mark_done(todo_id: str):
     todo_collection = _load_collection()
     query = {'_id': ObjectId(todo_id)}
     todo = todo_collection.find_one(query)
@@ -106,7 +105,7 @@ def mark_done(todo_id):
 
 @todo_bp.route('/<todo_id>/delete', methods=('POST',))
 @login_required
-def delete(todo_id):
+def delete(todo_id: str):
 
     todo_collection = _load_collection()
     query = {'_id': ObjectId(todo_id)}
