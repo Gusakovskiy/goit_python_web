@@ -13,7 +13,7 @@ from flask import (
 from pymongo.collection import Collection
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from module_11.personal_app.db import get_db
+from .db import get_db
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -49,6 +49,13 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+
+        if username:
+            user = db.user.find_one(
+                {"username": username}
+            )
+            if user is not None:
+                error = 'Already registered.'
 
         if error is None:
             collection_name = f'todo_list_{username}_{_get_random_str()}'
