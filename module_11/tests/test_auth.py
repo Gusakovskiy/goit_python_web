@@ -12,24 +12,6 @@ fake = Faker()
 password_length = [_id for _id in range(1, 13)]
 
 
-class AuthActions:
-    def __init__(self, client):
-        self._client = client
-
-    def login(self, username='test', password='test'):
-        return self._client.post(
-            '/auth/login',
-            data={'username': username, 'password': password}
-        )
-
-    def logout(self):
-        return self._client.get('/auth/logout')
-
-
-@pytest.fixture(scope='function')
-def auth(client):
-    return AuthActions(client)
-
 
 @pytest.mark.parametrize(('username', 'password'), [
     (fake.name(), fake.pystr(max_chars=choice(password_length)))
@@ -64,9 +46,9 @@ def test_register_validate_input(client, username, password, message):
     assert message in response.data
 
 
-def test_login(client, auth):
+def test_login(client, auth_test):
     assert client.get('/auth/login').status_code == 200
-    response = auth.login()
+    response = auth_test.login()
     assert response.headers['Location'] == 'http://localhost/'
 
     with client:
@@ -88,13 +70,13 @@ def test_login(client, auth):
         for _ in range(10)
     ]
 )
-def test_login_validate_input(auth, username, password, message):
-    response = auth.login(username, password)
+def test_login_validate_input(auth_test, username, password, message):
+    response = auth_test.login(username, password)
     assert message in response.data
 
 
-def test_logout(client, auth):
-    auth.login()
+def test_logout(client, auth_test):
+    auth_test.login()
     with client:
-        auth.logout()
+        auth_test.logout()
         assert 'user_id' not in session
