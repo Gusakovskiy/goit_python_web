@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<br>
+<div class="">
+    <div class="">
+        <form action="{{ url_for('todo.create') }}" method="post">
+            <div class="form-group mr-3 mb-0">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="task"
+                        name="task"
+                        placeholder="Enter a task here"
+                        value="{{ request.form['task'] }}"
+                        required
+                />
+            </div>
+            <button
+                    type="button submit"
+                    class="buttonsave btn btn-primary mr-3"
+            >
+                Save
+            </button>
+        </form>
+    </div>
+
+    {{ g.username }}
+    <div class="table-wrapper">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>ID.</th>
+                <th>Todo item</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks %}
+            <tr class="{{ 'table-success' if task.status else 'table-light' }}">
+                <td>{{ task['index'] }}</td>
+                <td class="{{'complete' if task.done else 'task' }}">
+                    {{ task['task'] }}
+                </td>
+                <td>{{ "Completed" if task.done else "In progress" }}</td>
+                <td>
+                    <form action="{{ url_for('todo.delete', todo_id=task['id']) }}" method="post">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                    {% if not task.done %}
+                    <form action="{{ url_for('todo.mark_done', todo_id=task['id']) }}" method="post">
+                        <button class="btn btn-success">Finished</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

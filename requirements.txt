@@ -5,6 +5,12 @@ pep8==1.7.1
 # async stuff
 aiomisc==14.3.2
 aiohttp==3.7.4
+aiohttp_session==2.9.0
+aiohttp_jinja2==1.5
+asgiref==3.4.1
+aiohttp-devtools==0.13.1
+passlib==1.7.4
+cryptography==3.4.8
 aiopath==0.5.11
 aiofile==3.6.0
 aioshutil==1.1
