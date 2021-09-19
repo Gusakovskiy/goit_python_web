@@ -74,11 +74,12 @@ def nested_url_for(
     return url_for(context, __route_name, query_, **parts)
 
 
-def _create_app(config: dict, loop=None):
+def create_app(config: dict, loop=None):
+    secret_key = config.get('secret_key', SECRET_KEY)
     app = web.Application(
         loop=loop,
         middlewares=[
-            session_middleware(EncryptedCookieStorage(SECRET_KEY)),
+            session_middleware(EncryptedCookieStorage(secret_key)),
             aiohttp_session_flash.middleware,
             user_auth_middleware,
             login_required_middleware,
@@ -117,7 +118,7 @@ if __name__ == '__main__':
     #     web.run_app(app)
     # </editor-fold>
     # without profiler
-    app = _create_app(
+    app = create_app(
         dict(db_name='todo_db'),
     )
     web.run_app(app)
