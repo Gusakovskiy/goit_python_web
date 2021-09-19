@@ -6,6 +6,7 @@ pep8==1.7.1
 aiomisc==14.3.2
 aiohttp==3.7.4
 aiohttp_session==2.9.0
+aiohttp_session_flash==0.0.4
 aiohttp_jinja2==1.5
 asgiref==3.4.1
 aiohttp-devtools==0.13.1

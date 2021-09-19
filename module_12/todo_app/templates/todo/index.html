@@ -6,7 +6,7 @@
 <br>
 <div class="">
     <div class="">
-        <form action="{{ url_for('todo.create') }}" method="post">
+        <form action="{{ nested_url_for('todo.create') }}" method="post">
             <div class="form-group mr-3 mb-0">
                 <input
                         type="text"
@@ -14,7 +14,6 @@
                         id="task"
                         name="task"
                         placeholder="Enter a task here"
-                        value="{{ request.form['task'] }}"
                         required
                 />
             </div>
@@ -27,7 +26,7 @@
         </form>
     </div>
 
-    {{ g.username }}
+    {{ current_user.user_name }}
     <div class="table-wrapper">
         <table class="table table-hover table-bordered">
             <thead>
@@ -47,11 +46,11 @@
                 </td>
                 <td>{{ "Completed" if task.done else "In progress" }}</td>
                 <td>
-                    <form action="{{ url_for('todo.delete', todo_id=task['id']) }}" method="post">
+                    <form action="{{ nested_url_for('todo.delete', todo_id=task['id']) }}" method="post">
                         <button class="btn btn-danger">Delete</button>
                     </form>
                     {% if not task.done %}
-                    <form action="{{ url_for('todo.mark_done', todo_id=task['id']) }}" method="post">
+                    <form action="{{ nested_url_for('todo.mark_done', todo_id=task['id']) }}" method="post">
                         <button class="btn btn-success">Finished</button>
                     </form>
                     {% endif %}

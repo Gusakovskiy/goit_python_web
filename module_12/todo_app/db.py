@@ -5,7 +5,7 @@ from pymongo.database import Database
 
 @sync_to_async
 def _init_mongo(app):
-    db_name = app['db_name']
+    db_name = app['config']['db_name']
     db_url = f"mongodb://mongo_admin:qwe123@localhost:27017/{db_name}"
     movies_mongo_client = pymongo.MongoClient(db_url)
     app['mongo_client'] = movies_mongo_client
@@ -20,7 +20,7 @@ async def create_db(app):
 def _close_db(app):
     mongo_client = app.pop('mongo_client', None)
     if mongo_client:
-        app['mongo_client'].close()
+        mongo_client.close()
     app.pop('db', None)
 
 

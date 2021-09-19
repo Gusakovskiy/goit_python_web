@@ -9,17 +9,17 @@
   />
 </head>
 <title>{% block title %}{% endblock %} - Personal APP</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ nested_url_for('static', filename='style.css') }}">
 <!--https://developer.mozilla.org/ru/docs/Web/CSS-->
 <nav>
   <h1>Personal TODO</h1>
   <ul>
-    {% if g.user %}
-    <li><span>{{ g.user['username'] }}</span>
-    <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+    {% if current_user %}
+    <li><span>{{ current_user.user_name }}</span>
+    <li><a href="{{ nested_url_for('auth.logout') }}">Log Out</a>
       {% else %}
-    <li><a href="{{ url_for('auth.register') }}">Register</a>
-    <li><a href="{{ url_for('auth.login') }}">Log In</a>
+    <li><a href="{{ nested_url_for('auth.register') }}">Register</a>
+    <li><a href="{{ nested_url_for('auth.login') }}">Log In</a>
       {% endif %}
   </ul>
 </nav>
@@ -28,7 +28,9 @@
     {% block header %}{% endblock %}
   </header>
   {% for message in get_flashed_messages() %}
-  <div class="flash">{{ message }}</div>
+    {% if message%}
+    <div class="flash">{{ message }}</div>
+    {% endif %}
   {% endfor %}
   {% block content %}{% endblock %}
 </section>
