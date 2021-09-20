@@ -14,21 +14,21 @@ from module_12.todo_app.settings import DB_URL
 
 fake = Faker()
 
-_TEST_DB = 'test_todo_db'
+_TEST_DB = "test_todo_db"
 
 
 def _init_db(db):
     users = [
-        ('test', 'test'),
+        ("test", "test"),
     ]
     for user_tuple in users:
         username, password = user_tuple
-        collection_name = f'todo_list_{username}_{fake.pystr(max_chars=5)}'
+        collection_name = f"todo_list_{username}_{fake.pystr(max_chars=5)}"
         db.user.insert_one(
             dict(
                 username=username,
                 password=pbkdf2_sha256.hash(password),
-                todo_collection=collection_name
+                todo_collection=collection_name,
             ),
         )
         user_todo: Collection = getattr(db, collection_name)
@@ -65,7 +65,7 @@ def db(app):
     # cleanup after test
     db_url = DB_URL.format(_TEST_DB)
     mongo_client = pymongo.MongoClient(db_url)
-    mongo_client.drop_database(app['config']['db_name'])
+    mongo_client.drop_database(app["config"]["db_name"])
 
 
 @pytest.fixture
@@ -78,14 +78,13 @@ class TestClient:
         self._client = client
         self._db = db
 
-    async def login(self, username='test', password='test'):
+    async def login(self, username="test", password="test"):
         return await self._client.post(
-            '/auth/login',
-            data={'username': username, 'password': password}
+            "/auth/login", data={"username": username, "password": password}
         )
 
     async def logout(self):
-        return await self._client.get('/auth/logout')
+        return await self._client.get("/auth/logout")
 
     @property
     def client(self):
@@ -96,8 +95,9 @@ class TestClient:
         return self._db
 
 
-@pytest.fixture(scope='function')
-def auth_test(client, db):
+@pytest.fixture(scope="function")
+def test_helper(client, db):
+    """Fixture to make access to db and client simpler"""
     return TestClient(client, db)
 
 
@@ -108,7 +108,7 @@ class UserCollectionHelper:
     @sync_to_async
     def _find_user_by_username(self, name):
         user_collection: Collection = self._db.user
-        user = user_collection.find_one({'username': name})
+        user = user_collection.find_one({"username": name})
         return user
 
     @sync_to_async
@@ -124,6 +124,7 @@ class UserCollectionHelper:
         return await self._find_all_users()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 async def user_collection(db):
+    """Helper fixture to get access to user collection"""
     return UserCollectionHelper(db)

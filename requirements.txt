@@ -1,7 +1,7 @@
 pytest==6.2.4
 coverage==5.5
 pep8==1.7.1
-
+black==21.9b0
 # async stuff
 aiomisc==14.3.2
 aiohttp==3.7.4
