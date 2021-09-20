@@ -2,10 +2,12 @@ import pymongo
 from aioshutil import sync_to_async
 from pymongo.database import Database
 
+from module_12.todo_app.settings import DB_URL
+
 
 def get_db(app):
     db_name = app['config']['db_name']
-    db_url = f"mongodb://mongo_admin:qwe123@localhost:27017/{db_name}"
+    db_url = DB_URL.format(db_name)
     if 'mongo_client' not in app:
         movies_mongo_client = pymongo.MongoClient(db_url)
         app['mongo_client'] = movies_mongo_client

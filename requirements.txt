@@ -10,6 +10,7 @@ aiohttp_session_flash==0.0.4
 aiohttp_jinja2==1.5
 asgiref==3.4.1
 aiohttp-devtools==0.13.1
+pytest-aiohttp==0.3.0
 passlib==1.7.4
 cryptography==3.4.8
 aiopath==0.5.11

@@ -14,17 +14,22 @@ from aiomisc import entrypoint
 from aiomisc.service import Profiler
 from jinja2 import Environment
 
-from module_12.todo_app.auth import auth_app, user_auth_middleware, login_required_middleware
+from module_12.todo_app.auth import user_auth_middleware, login_required_middleware, create_auth_app
 from module_12.todo_app.db import init_app
 from module_12.todo_app.settings import TEMPLATE_PATH, SECRET_KEY, DEBUG, STATIC_PATH
-from module_12.todo_app.todo import todo_app, index
+from module_12.todo_app.todo import index, create_todo_app
 
 # from module_12.todo_app.todo import todo_app
-SUB_APPS = {
-    'auth': auth_app,
-    'todo': todo_app,
+_SUB_APPS_FACTORY = {
+    'auth': create_auth_app,
+    'todo': create_todo_app,
 }
-_REGISTERED_SUBAPPS = {key for key in SUB_APPS}
+_REGISTERED_SUB_APPS = {key for key in _SUB_APPS_FACTORY}
+
+
+def _sub_application(config=None):
+    for app_name, app_factory in _SUB_APPS_FACTORY.items():
+        yield app_name, app_factory(config)
 
 
 async def request_context(request):
@@ -42,7 +47,7 @@ def nested_url_for(
 ):
     """Unforunatly jinja doesn't work with nested apps """
     subapp_route = any(
-        __route_name.startswith(subapp) for subapp in _REGISTERED_SUBAPPS
+        __route_name.startswith(subapp) for subapp in _REGISTERED_SUB_APPS
     )
     if subapp_route:
         # <editor-fold desc="jinja clean logic">
@@ -99,7 +104,7 @@ def create_app(config: dict, loop=None):
 
     app.add_routes([web.static('/static', STATIC_PATH, name='static')])
     app.add_routes([web.get('/', index, name='index', )])
-    for name, sub_app in SUB_APPS.items():
+    for name, sub_app in _sub_application(config=None):
         app.add_subapp(f'/{name}/', sub_app)
         # backward link
         sub_app['parent_app'] = app

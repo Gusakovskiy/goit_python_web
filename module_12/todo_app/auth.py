@@ -10,7 +10,7 @@ from passlib.hash import pbkdf2_sha256
 from passlib.utils import getrandstr, rng
 from pymongo.collection import Collection
 
-auth_app = web.Application()
+
 routes = web.RouteTableDef()
 
 
@@ -28,8 +28,7 @@ def _hash_password(password: str) -> str:
 @sync_to_async
 def _verify_password(password: str, hashed_password: str) -> bool:
     try:
-        _result = pbkdf2_sha256.verify(password, hashed_password)
-        return True
+        return pbkdf2_sha256.verify(password, hashed_password)
     except ValueError:
         pass
     return False
@@ -63,9 +62,7 @@ def user_exists(db, username) -> bool:
     user = db.user.find_one(
         {"username": username}
     )
-    if user is not None:
-        return True
-    return False
+    return user is not None
 
 
 # </editor-fold>
@@ -111,23 +108,26 @@ async def register(request):
         error = 'Password is required.'
 
     if username:
-        if await user_exists(db, username):
-            error = 'User Exists'
+        exists = await user_exists(db, username)
+        if exists:
+            error = 'Already registered.'
 
     flash(request, error)
+    if error is not None:
+        # show errors
+        return
 
-    if error is None:
-        rand_str = await _get_random_str()
-        collection_name = f'todo_list_{username}_{rand_str}'
-        user_dict = dict(
-            username=username,
-            password=await _hash_password(password),
-            todo_collection=collection_name
-        )
-        await insert_user(db, user_dict)
-        await insert_todos(db, collection_name)
-        location = request.app.router['login'].url_for()
-        return web.HTTPFound(location=location)
+    rand_str = await _get_random_str()
+    collection_name = f'todo_list_{username}_{rand_str}'
+    user_dict = dict(
+        username=username,
+        password=await _hash_password(password),
+        todo_collection=collection_name
+    )
+    await insert_user(db, user_dict)
+    await insert_todos(db, collection_name)
+    location = request.app.router['login'].url_for()
+    return web.HTTPFound(location=location)
 
 
 @routes.post('/login', name='login')
@@ -145,11 +145,13 @@ async def login(request):
     user = await get_user_by_name(db, username)
     if user is None:
         error = 'Incorrect username.'
-    elif not await _verify_password(password, user['password']):
-        error = 'Incorrect password.'
+    else:
+        correct_password = await _verify_password(password, user['password'])
+        if not correct_password:
+            error = 'Incorrect password.'
 
-    session = await get_session(request)
     if error is None:
+        session = await get_session(request)
         session.clear()
         session['user_id'] = str(user['_id'])
         parent_app = request.app['parent_app']
@@ -167,6 +169,8 @@ async def logout(request):
     # TODO Check if working
     session = await get_session(request)
     session.clear()
+    request.app.pop('user', None)
+    request.app['parent_app'].pop('user', None)
     location = request.app.router['login'].url_for()
     return web.HTTPFound(location=location)
 
@@ -195,6 +199,7 @@ async def login_required_middleware(request, handler):
     user = request.app.get('user')
     if user is not None:
         return await handler(request)
+    auth_app = request.app['auth_app']
     login = auth_app.router['login'].url_for()
     register = auth_app.router['register'].url_for()
     if request.rel_url == login or request.rel_url == register:
@@ -205,4 +210,11 @@ async def login_required_middleware(request, handler):
 
 
 # </editor-fold>
-auth_app.add_routes(routes)
+
+def create_auth_app(config=None):
+    app = web.Application()
+    if config:
+        app['config'] = None
+    app.add_routes(routes)
+    return app
+

@@ -7,3 +7,4 @@ SECRET_KEY = b"s}\x19\xf0\xa2\x0b\x86\x12\xb8\n'\xa38\x02Z\x1aB\x85>\xd6\x0b\x90
 
 # in real world applications DEBUG_APP should be default False
 DEBUG = os.environ.get('DEBUG_APP', True)
+DB_URL = 'mongodb://mongo_admin:qwe123@localhost:27017/{}'

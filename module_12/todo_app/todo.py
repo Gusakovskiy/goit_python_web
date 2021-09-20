@@ -7,7 +7,6 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from pymongo.collection import Collection, ReturnDocument
 
-todo_app = web.Application()
 routes = web.RouteTableDef()
 
 
@@ -187,4 +186,9 @@ async def delete(request):
     return web.HTTPFound(location=index_url)
 
 
-todo_app.add_routes(routes)
+def create_todo_app(config=None):
+    app = web.Application()
+    if config:
+        app['config'] = None
+    app.add_routes(routes)
+    return app
