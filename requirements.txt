@@ -1,10 +1,18 @@
 pytest==6.2.4
 coverage==5.5
 pep8==1.7.1
-
+black==21.9b0
 # async stuff
 aiomisc==14.3.2
 aiohttp==3.7.4
+aiohttp_session==2.9.0
+aiohttp_session_flash==0.0.4
+aiohttp_jinja2==1.5
+asgiref==3.4.1
+aiohttp-devtools==0.13.1
+pytest-aiohttp==0.3.0
+passlib==1.7.4
+cryptography==3.4.8
 aiopath==0.5.11
 aiofile==3.6.0
 aioshutil==1.1
