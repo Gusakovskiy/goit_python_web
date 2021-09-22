@@ -217,6 +217,6 @@ async def login_required_middleware(request, handler):
 def create_auth_app(config=None):
     app = web.Application()
     if config:
-        app["config"] = None
+        app["config"] = config
     app.add_routes(routes)
     return app

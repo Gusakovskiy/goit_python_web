@@ -1,5 +1,5 @@
 import pymongo
-from aioshutil import sync_to_async
+from asgiref.sync import sync_to_async
 from pymongo.database import Database
 
 from module_12.todo_app.settings import DB_URL

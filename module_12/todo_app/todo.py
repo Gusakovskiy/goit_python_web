@@ -121,6 +121,7 @@ async def create(request):
 
     if error is not None:
         flash(request, error)
+        return
     splitted_task = task.split(";")
     if len(splitted_task) == 2:
         title, description = splitted_task
@@ -181,6 +182,6 @@ async def delete(request):
 def create_todo_app(config=None):
     app = web.Application()
     if config:
-        app["config"] = None
+        app["config"] = config
     app.add_routes(routes)
     return app

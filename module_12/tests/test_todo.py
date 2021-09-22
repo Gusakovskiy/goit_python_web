@@ -95,6 +95,8 @@ async def test_exists_required(test_helper, path):
     client = test_helper.client
     response = await client.post(path)
     assert response.status == 404
+    data = await response.text()
+    assert "Not found todo" in data
 
 
 @pytest.mark.parametrize(
