@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block header %}
+{% endblock %}
+
+{% block content %}
+{% load todo_tags %}
+<br>
+<div class="">
+    <div class="">
+        <form action="{% url 'todo:create' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group mr-3 mb-0">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="task"
+                        name="task"
+                        placeholder="Enter a task here"
+                        required
+                />
+            </div>
+            <button
+                    type="button submit"
+                    class="buttonsave btn btn-primary mr-3"
+            >
+                Save
+            </button>
+        </form>
+    </div>
+
+    {{ current_user.user_name }}
+    <div class="table-wrapper">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>ID.</th>
+                <th>Todo item</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks %}
+            <tr class="{% is_task_done task.done 'table-success'  'table-light'%}">
+                <td>{{ task.id }}</td>
+                <td class="{% is_task_done task.done 'complete' task.title %}">
+                    {{ task.title }}
+                </td>
+                <td>{% is_task_done task.done 'Completed' 'In progress' %}</td>
+                <td>
+                    <form action="{% url 'todo:delete' task.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                    {% if not task.done %}
+                    <form action="{% url 'todo:mark_done' task.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-success">Finished</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
