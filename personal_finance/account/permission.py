@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, IsAuthenticated
 
 
 class IsSameUserPermission(BasePermission):
@@ -15,3 +15,8 @@ class IsSameUserPermission(BasePermission):
             not user.is_anonymous and
             user.id == obj.id  # NOQA
         )
+#
+# class FinanceIsAuthenticated(IsAuthenticated):
+#
+#     def has_permission(self, request, view):
+#         return bool(request.user and request.user.is_authenticated)

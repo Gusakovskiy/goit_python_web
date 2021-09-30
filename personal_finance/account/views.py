@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 #
 # from todo.api import create_default_todo  # NOQA
 # from user.api import create_user  # NOQA
+from django.utils.decorators import classonlymethod
 
 from rest_framework import mixins, renderers
 from rest_framework.authentication import BasicAuthentication
@@ -26,9 +27,10 @@ class CreateUserView(
     GenericViewSet,
 ):
     serializer_class = UserSerializer
-    ueryset = User.objects.filter(is_active=True)
-    authentication_classes = []
+    queryset = User.objects.filter(is_active=True)
+    authentication_classes = ()
     permission_classes = []
+    throttle_classes = ()
 
 
 class UserViewSet(
