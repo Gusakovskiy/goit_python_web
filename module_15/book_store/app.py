@@ -1,5 +1,5 @@
 from typing import Optional, List
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel, EmailStr
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.exceptions import ConflictError, RequestError
@@ -157,6 +157,7 @@ async def delete_book(book_id: str):
 
 @app.put("/books/{book_id}", status_code=200, response_model=Book)
 async def update_book(book_id: str, book: BookBase) -> Book:
+    """Update my favorite"""
     await get_document_or_error(book_id, "No such book", 404, ["book"])
     await get_document_or_error(book.author_id, "No such author", 422, ["author"])
     doc = book.dict()
@@ -203,3 +204,23 @@ async def app_startapp():
 @app.on_event("shutdown")
 async def app_shutdown():
     await es_client.close()
+
+
+if __name__ == '__main__':
+    ...
+    # Q&A
+    # Approaches to develop API
+    # Introduction to FastAPI
+    #    * Starlette
+    #    * Pydantic
+    # Introduction to ElasticSearch
+    #   * indexes
+    #   * documents
+    # Introduction to App
+    #  * startapp
+    #  * shutdown
+    #  * documentation (drf documentation)
+    #  * endpoints
+    #  * idempotence
+    #  * create author and book
+    #  * example feature
