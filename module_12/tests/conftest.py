@@ -21,6 +21,7 @@ def _init_db(db):
     users = [
         ("test", "test"),
     ]
+    # todo remember to install pytest-aiohttp
     for user_tuple in users:
         username, password = user_tuple
         collection_name = f"todo_list_{username}_{fake.pystr(max_chars=5)}"

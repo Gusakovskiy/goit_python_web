@@ -11,6 +11,8 @@ __pycache__/
 *.xlsx
 *.csv
 tmp.txt
+all_users.txt
+pro_users.txt
 **/**/trash/
 **/**/sorted_trash/
 # C extensions
