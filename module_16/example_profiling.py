@@ -1,6 +1,11 @@
+# вижу три возможности повысить производительность:
+# - использовать dict вместо списка таплов
+# - использовать set для поиска пересечений
+# - использовать списковое включение для создания финального списка e-mail
+
 
 def get_pro_users():
-    user_ids = []
+    user_ids = set()
     with open('pro_users.txt', 'r') as _f:
         while _f.readable():
             line = _f.readline()
@@ -8,12 +13,12 @@ def get_pro_users():
                 break
             _id = line.strip()
             if _id.isdigit():
-                user_ids.append(int(_id))
+                user_ids.add(int(_id))
     return user_ids
 
 
 def get_all_user():
-    users = []
+    users = dict()
     with open('all_users.txt', 'r') as _f:
         while _f.readable():
             line = _f.readline()
@@ -21,20 +26,13 @@ def get_all_user():
                 break
             _id, email = line.strip().split(',')
             if _id.isdigit():
-                users.append((int(_id), email))
+                users[int(_id)] = email
     return users
 
 
 def get_pro_users_emails():
-    user_emails = []
     users = get_all_user()
-    # get only ids
-    user_ids = [u[0] for u in users]
-    for user_id in get_pro_users():
-        if user_id in user_ids:
-            _id = user_ids.index(user_id)
-            _, email = users[_id]
-            user_emails.append(email)
+    user_emails = [users[i] for i in set(users) & get_pro_users()]
     return user_emails
 
 
